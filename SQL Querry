@@ -1,0 +1,39 @@
+create database login;
+use login;
+create table signup(
+fullname varchar(50) ,email varchar(50) ,
+password varchar(50)
+);
+select * from signup;
+select * from deatils;
+create table deatils(
+FirstName varchar(50) ,lastname varchar(50),phone int,email varchar(50),linkedin varchar(50),github varchar(50),address varchar(10));
+alter table deatils modify column phone int(50);
+create table professional(summary varchar(200));
+select * from professional;
+create table school(school varchar(50),city varchar(50),batch varchar(50),percentage varchar(50),school1 varchar(50),city1 varchar(50),batch1 varchar(50),percentage1 varchar(50));
+select*from school;
+create table college(university varchar(50),city varchar(50),batch varchar(50),percentage varchar(50),university1 varchar(50),city1 varchar(50),batch1 varchar(50),percentage1 varchar(50));
+select*from college;
+create table skill(languages varchar(50),communication varchar(50),networksecurity varchar(50),operatingsystem varchar(50),frameworks varchar(50),others varchar(50));
+select*from skill;
+create table exp(name varchar(50),location varchar(50),date varchar(50),summary varchar(50));
+select*from exp;
+create table project(title varchar(50),summary varchar(50));
+select*from project;
+alter table college rename column city to ccity,rename column batch to cbatch,rename column percentage to cpercentage,rename column city1 to ccity1,rename column batch1 to cbatch1,rename column percentage1 to cpercentage1;
+alter table exp rename column summary to esummary;
+alter table project rename column summary to psummary;
+alter table deatils modify column phone varchar(30);
+alter table deatils modify column address varchar(300);
+alter table professional modify column summary varchar(3000);
+alter table exp modify column esummary varchar(300);
+alter table project modify column psummary varchar(300);
+alter table deatils ADD column id int auto_increment primary key;
+alter table professional ADD column id int auto_increment primary key;
+alter table school ADD column id int auto_increment primary key;
+alter table college ADD column id int auto_increment primary key;
+alter table skill ADD column id int auto_increment primary key;
+alter table exp ADD column id int auto_increment primary key;
+alter table project ADD column id int auto_increment primary key;
+
