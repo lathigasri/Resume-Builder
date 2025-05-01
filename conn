@@ -1,0 +1,185 @@
+package resume;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.FileOutputStream;
+import java.sql.*;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
+import com.itextpdf.text.Font;
+public class conn extends JFrame {
+
+    public conn() {
+        initComponents();
+    }
+
+    private void initComponents() {
+        setTitle("Resume Generator");
+        setSize(800, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        JLabel label = new JLabel("Click the button to generate your resume", SwingConstants.CENTER);
+        JButton generateButton = new JButton("Generate PDF");
+
+        generateButton.addActionListener(e -> {
+            generatePDF();
+        });
+
+        panel.add(label, BorderLayout.CENTER);
+        panel.add(generateButton, BorderLayout.SOUTH);
+        add(panel);
+    }
+
+    private void generatePDF() {
+        try {
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/login", "root", "ROOT");
+            Statement stmt = con.createStatement();
+            
+            ResultSet rs1 = stmt.executeQuery("SELECT * FROM deatils ORDER BY id DESC limit 1");
+            String FirstName = "", lastname = "", phone = "", email = "", linkedin = "", github = "", address = "";
+            if (rs1.next()) {
+                FirstName = rs1.getString("FirstName");
+                lastname = rs1.getString("lastname");
+                phone = rs1.getString("phone");
+                email = rs1.getString("email");
+                linkedin = rs1.getString("linkedin");
+                github = rs1.getString("github");
+                address = rs1.getString("address");
+            }
+
+            ResultSet rs2 = stmt.executeQuery("SELECT * FROM professional ORDER BY id DESC limit 1");
+            String summary = "";
+            if (rs2.next()) {
+                summary = rs2.getString("summary");
+            }
+
+            ResultSet rs3 = stmt.executeQuery("SELECT * FROM school ORDER BY id DESC limit 1");
+            String school = "", city = "", batch = "", percentage = "", school1 = "", city1 = "", batch1 = "", percentage1 = "";
+            if (rs3.next()) {
+                school = rs3.getString("school");
+                city = rs3.getString("city");
+                batch = rs3.getString("batch");
+                percentage = rs3.getString("percentage");
+                school1 = rs3.getString("school1");
+                city1 = rs3.getString("city1");
+                batch1 = rs3.getString("batch1");
+                percentage1 = rs3.getString("percentage1");
+            }
+
+            ResultSet rs4 = stmt.executeQuery("SELECT * FROM college ORDER BY id DESC limit 1");
+            String university = "", ccity = "", cbatch = "", cpercentage = "", university1 = "", ccity1 = "", cbatch1 = "", cpercentage1 = "";
+            if (rs4.next()) {
+                university = rs4.getString("university");
+                ccity = rs4.getString("ccity");
+                cbatch = rs4.getString("cbatch");
+                cpercentage = rs4.getString("cpercentage");
+                university1 = rs4.getString("university1");
+                ccity1 = rs4.getString("ccity1");
+                cbatch1 = rs4.getString("cbatch1");
+                cpercentage1 = rs4.getString("cpercentage1");
+            }
+
+            ResultSet rs5 = stmt.executeQuery("SELECT * FROM skill ORDER BY id DESC limit 1");
+            String languages = "", communication = "", networksecurity = "", operatingsystem = "", frameworks = "", others = "";
+            if (rs5.next()) {
+                languages = rs5.getString("languages");
+                communication = rs5.getString("communication");
+                networksecurity = rs5.getString("networksecurity");
+                operatingsystem = rs5.getString("operatingsystem");
+                frameworks = rs5.getString("frameworks");
+                others = rs5.getString("others");
+            }
+
+            ResultSet rs6 = stmt.executeQuery("SELECT * FROM exp ORDER BY id DESC limit 1");
+            String name = "", location = "", date = "", esummary = "";
+            if (rs6.next()) {
+                name = rs6.getString("name");
+                location = rs6.getString("location");
+                date = rs6.getString("date");
+                esummary = rs6.getString("esummary");
+            }
+
+            ResultSet rs7 = stmt.executeQuery("SELECT * FROM project ORDER BY id DESC limit 1");
+            String titl = "", psummary = "";
+            if (rs7.next()) {
+                titl = rs7.getString("title");
+                psummary = rs7.getString("psummary");
+            }
+
+            // Generate PDF
+            Document document = new Document();
+            PdfWriter.getInstance(document, new FileOutputStream("Resume.pdf"));
+            document.open();
+
+            Font titleFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 26,BaseColor.DARK_GRAY);
+            Paragraph title = new Paragraph("RESUME", titleFont);
+            title.setAlignment(Paragraph.ALIGN_CENTER);
+            document.add(title);
+            
+            Font sectionFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 18, BaseColor.BLUE);
+Font labelFont = FontFactory.getFont(FontFactory.TIMES_ROMAN, 15, BaseColor.BLACK);
+
+
+            document.add(new Paragraph("Personal Info",sectionFont));
+            document.add(new Paragraph("FirstName: " + FirstName,labelFont));
+            document.add(new Paragraph("Lastname: " + lastname,labelFont));
+            document.add(new Paragraph("Phone: " + phone,labelFont));
+            document.add(new Paragraph("Email: " + email,labelFont));
+            document.add(new Paragraph("Linkedin: " + linkedin,labelFont));
+            document.add(new Paragraph("Github: " + github,labelFont));
+            document.add(new Paragraph("Address: " + address,labelFont));
+            document.add(new Paragraph("-------------------------------------------"));
+
+            document.add(new Paragraph("Professional:",sectionFont));
+            document.add(new Paragraph("Summary: " + summary,labelFont));
+            document.add(new Paragraph("-------------------------------------------"));
+
+            document.add(new Paragraph("School Of SSLC:",sectionFont));
+            document.add(new Paragraph("School: " + school,labelFont));
+            document.add(new Paragraph("City: " + city,labelFont));
+            document.add(new Paragraph("Batch: " + batch,labelFont));
+            document.add(new Paragraph("Percentage: " + percentage,labelFont));
+
+            document.add(new Paragraph("School Of HSC:",sectionFont));
+            document.add(new Paragraph("School: " + school1,labelFont));
+            document.add(new Paragraph("City: " + city1,labelFont));
+            document.add(new Paragraph("Batch: " + batch1,labelFont));
+            document.add(new Paragraph("Percentage: " + percentage1,labelFont));
+            document.add(new Paragraph("-------------------------------------------"));
+
+            document.add(new Paragraph("College of UG:",sectionFont));
+            document.add(new Paragraph(ccity + " from " + university + " (" + cbatch + "), " + cpercentage,labelFont));
+            document.add(new Paragraph("College of PG:",sectionFont));
+            document.add(new Paragraph(ccity1 + " from " + university1 + " (" + cbatch1 + "), " + cpercentage1,labelFont));
+            document.add(new Paragraph("-------------------------------------------"));
+
+            document.add(new Paragraph("Skills:",sectionFont));
+            document.add(new Paragraph(languages,labelFont));
+            document.add(new Paragraph(communication,labelFont));
+            document.add(new Paragraph(networksecurity,labelFont));
+            document.add(new Paragraph(operatingsystem,labelFont));
+            document.add(new Paragraph(frameworks,labelFont));
+            document.add(new Paragraph(others,labelFont));
+            document.add(new Paragraph("-------------------------------------------"));
+
+            document.add(new Paragraph("Internship Experience:",sectionFont));
+            document.add(new Paragraph(date + " at " + name + " in " + location,labelFont));
+            document.add(new Paragraph(esummary,labelFont));
+            document.add(new Paragraph("-------------------------------------------"));
+
+            document.add(new Paragraph("Project:",sectionFont));
+            document.add(new Paragraph("Title: " + titl,labelFont));
+            document.add(new Paragraph(psummary,labelFont));
+
+            document.close();
+            JOptionPane.showMessageDialog(this, "Resume PDF created successfully!");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error generating PDF: " + e.getMessage());
+        }
+    }
+}
