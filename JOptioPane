@@ -1,0 +1,8 @@
+
+package resume;
+
+class JOptioPane {
+
+    static int ERROR_MESSAGE;
+    
+}
